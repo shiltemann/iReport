@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+	<script>
+		$('#tabs').tabs();
+		$('#tabs1').tabs();
+		$('#tabs2').tabs();
+	</script>
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css">
+</head>
+<body><div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">First tab</a></li>
+        <li><a href="#tabs-2">Second tab</a></li>
+    </ul>
+    <div id="tabs-1">
+        <p>
+            <div id="tabs1">
+                <ul>
+                    <li><a href="#tabs-11">First nested 1</a></li>
+                    <li><a href="#tabs-12">Second nested 1</a></li>
+                </ul>
+                <div id="tabs-11">
+                    <p>Content for first nested tab 1</p>
+                </div>
+                <div id="tabs-12">
+                    <p>Content for second nested tab 2</p>
+                </div>
+            </div>
+        </p>
+    </div>
+    <div id="tabs-2">
+        <p>
+            <div id="tabs2">
+                <ul>
+                    <li><a href="#tabs-21">First nested tab 2</a></li>
+                    <li><a href="#tabs-22">Second nested tab 2</a></li>
+                </ul>
+                <div id="tabs-21">
+                    <p>Content of first nested tab 2</p>
+                </div>   
+                <div id="tabs-22">
+                    <p>Content of second nested tab 2</p>
+                </div>
+            </div>        
+        </p>
+    </div>
+	</div>
+</body>
+</html>

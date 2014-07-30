@@ -1,0 +1,226 @@
+<tool id="iReport" name="iReport" version="1">
+ 	<description> create an HTML report </description>
+	
+
+  	<command interpreter="bash"> 
+		
+  		iReport.sh 
+			--galaxypath ${report.files_path}
+			--htmlout ${report}
+			--minwidth ${minwidth}
+			--coverimage "-${coverimage}"
+			#for $i, $t in enumerate($tabs)
+				--tab ${t.tabtitle}
+				#for $j, $u in enumerate($t.content)
+					#if $u.filetype.itemtype == "image"
+					--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}:${u.filetype.zoomlevel}:${u.filetype.zoomenable}:${u.filetype.align}"
+					#else if $u.filetype.itemtype == "table"
+						#if $u.filetype.collink.columnhyperlink == "Y"
+							--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}:${u.filetype.fancy}:Y:${u.filetype.collink.urlcol}:${u.filetype.collink.urlprefix}:${u.filetype.collink.urlsuffix}:${u.filetype.collink.urlitems}"
+						#else
+							--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}:${u.filetype.fancy}:N"
+						#end if
+					#else if $u.filetype.itemtype == "link"
+						--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}:${__app__.security.encode_id($u.filetype.item.id)}:${u.filetype.ireport}:${u.filetype.item2}"
+					#else if $u.filetype.itemtype == "weblink"
+						--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}:${u.filetype.item2}"
+					#else 
+						--item "${t.tabtitle}:${u.filetype.itemtype}:${u.filetype.item}:${u.filetype.break}"
+					#end if
+				#end for
+			#end for
+			--label "${label}"
+  	</command>
+
+  	<inputs>
+		<param name="label" type="text" size="100" label="Name of Report" />
+		<param name="coverimage" type="text" size="100" label="Link to cover image" help="Optional. A default image will be used if not specified"/>
+		<param name="minwidth" type="integer" min="0" max="5000" value="1200" label="Width of page (in pixels)" />
+		<repeat name="tabs" title="Tab" default="1" >
+			<param name="tabtitle" type="text" size="50" label="Enter tab name">
+				<sanitizer>
+					<valid initial="default">
+						<add preset="string.printable"/>
+						<remove value="&quot;"/>
+						<remove value="\"/>
+						<remove value="&#xA;"/>
+						<remove value="&#xD;"/>
+						<remove value="&amp;"/>
+						<remove value=":"/>	
+						<remove value=" "/>
+					</valid> 
+					<mapping initial="none">
+						<add source="\" target="\\"/>
+						<add source="&quot;" target="==quote=="/>
+						<add source="&amp;" target="&amp;&amp;"/>
+						<add source="&#xA;" target="&amp;n"/>
+						<add source="&#xD;" target="&amp;r"/>
+						<add source=":" target="==colon=="/>
+						<add source=" " target="_s_"/>
+					</mapping> 
+				</sanitizer>
+			</param>  
+			<repeat name="content" title="Content-Item" default="1">
+				<conditional name="filetype">
+				<param name="itemtype" type="select" label="Select Item Type" >
+					<option value="" > Please choose item type </option>
+					<option value="text" > Text Field </option>
+					<option value="textfile" > Text File from history </option>
+					<option value="image"> Image </option>
+					<option value="pdf"  > PDF File </option>
+					<option value="table"> Table </option>
+					<option value="link" > Link to file </option>
+					<option value="links"> Links to files in archive</option>
+					<option value="weblink" > Web link </option>
+					<validator type="empty_field" />
+				</param>
+				<when value="text">
+					<param name="item" type="text" area="true" size="10x100" label="Text to display." help="can explicitly add whitespace adding \n in your text for a newline or \t for a tab. HTML tags em, strong, b, i, h1-h6 tags" >
+						<sanitizer>
+							<valid initial="default">
+								<add preset="string.printable"/>
+								<remove value="\"/>
+								<remove value="/"/>
+								<remove value=","/>
+								<remove value=":"/>
+								<remove value="&lt;"/>
+								<remove value="&gt;"/>
+								<remove value="&apos;"/>
+								<remove value="&quot;"/>
+								<remove value="&#xA;"/>
+								<remove value="&#xD;"/>
+								<remove value="&amp;"/>
+								<remove value="&#x3a;"/>
+								<remove value=" "/>
+							</valid> 
+							<mapping initial="none"> 
+								<add source="\" target="\\"/> 
+								<add source="/" target="==slash=="/>
+								<add source="&amp;" target="&amp;&amp;"/> 
+								<add source="&#xA;" target="&amp;n"/> 
+								<add source="&#xD;" target="&amp;r"/> 
+								<add source="&#x3a;" target="&amp;c"/> 
+								<add source=" " target="==space=="/> 
+								<add source="," target="==comma=="/> 
+								<add source="&lt;" target="==lt=="/> 
+								<add source="&gt;" target="==gt=="/> 
+								<add source="&apos;" target="==apos=="/> 
+								<add source="&quot;" target="==quote=="/>
+								<add source=":" target="==colon=="/>
+							</mapping> 
+						</sanitizer>
+					</param>  
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?"/>
+				</when>
+				<when value="textfile">
+					<param name="item" type="data" label="Text File"  help="Text file to display verbatim"/>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+				<when value="image">
+					<param name="item" type="data" label="Image File" format="png,svg,jpg,jpeg" help="Supported formats: png, jpg, svg. If image is scaled by choice of width, zoom-on-mousover effect is added."/>
+					<param name="zoomlevel" type="integer" min="0" max="5000" value="250" label="Width (in pixels)" help="enter 0 to keep original size" />					
+					<param name="zoomenable" type="boolean" checked="True" truevalue="Y" falsevalue="N" label="Enable zoom-on-mouseover effect?" help="If checked and nonzero width, zoom-on-mousover effect added"/>
+					<param name="align" type="select" label="Alignment of image (float)" help="Use left or right align to have images and text next to each other. Always specify image first (with alignment), then text, if you want to show them side by side." >
+						<option value="none"  > default (recommended) </option>
+						<option value="left"  > left </option>
+						<option value="right" > right </option>
+						<option value="middle"> center </option>
+						<!--<option value="top"> top </option>
+						<option value="bottom"> bottom </option>-->
+					</param>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+				<when value="table">
+					<param name="item" type="data" label="Table File" help="must be a tab-delimited file with a 1-line header" />
+					<param name="fancy" type="boolean" checked="True" truevalue="Y" falsevalue="N" label="Fancy table?" help="If selected, will create, sortable, searchable, paginated table. Otherwise not (for small tables)"/>
+					<conditional name="collink">
+						<param name="columnhyperlink" type="select" label="create url links from one of the columns in your table?" help="For example: from column with gene names, link to genecards page">
+							<option value="N"> No </option>
+							<option value="Y"> Yes </option>
+						</param>
+						<when value="Y">
+							<param name="urlcol"     type="data_column"   data_ref="item" multiple="False" label="Column to turn in to weblinks"  /> 
+							<param name="urlprefix" type="text" size="75" label="URL prefix" help="this will be placed before value in column to form the weblink. e.g. for genecards use: http://www.genecards.org/cgi-bin/carddisp.pl?gene=">
+								<sanitizer>
+									<valid initial="default"> 
+										<add preset="string.printable"/> 
+										<remove value="&amp;"/> 
+										<remove value=":"/>	
+										<remove value="/"/>	
+										<remove value=" "/>
+									</valid> 
+									<mapping initial="none"> 
+										<add source="&amp;" target="==amp=="/>
+										<add source=":" target="==colon=="/>
+										<add source="/" target="//"/>
+										<add source=" " target=""/>
+									</mapping> 
+								</sanitizer>
+								</param>
+							<param name="urlsuffix" type="text" size="75" label="URL suffix" help="this will be placed before value in column to form the weblink. e.g. For genecards, there is no suffix">
+								<sanitizer>
+									<valid initial="default"> 
+										<add preset="string.printable"/> 
+										<remove value="&amp;"/> 
+										<remove value="/"/> 
+										<remove value=" "/>
+									</valid> 
+									<mapping initial="none"> 
+										<add source="&amp;" target="&amp;&amp;"/> 
+										<add source="/" target="//"/>
+										<add source=" " target=""/>
+									</mapping> 
+								</sanitizer>
+							</param>
+							<param name="urlitems" type="data" label="(Not yet implemented) Archive with files to link to" optional="true" help="Optional. Only if you want to link column entries to local files instead of websites" format="zip,gz,bz2,tar"/>
+						</when>
+					</conditional>	
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+				<when value="pdf">
+					<param name="item" type="data" label="PDF File" format="pdf"/>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+				<when value="link">
+					<param name="item" type="data" label="File to link to" />
+					<param name="item2" type="text" size="100" label="link text" help="text to display as a link"/>
+					<param name="ireport" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="is the link another iReport?"/>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+				<when value="links">
+					<param name="item" type="data" label="Archive with files to link to" help="links will be created to each file in the archive. Supported formats: zip, gz, tar, bz2"/>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout" />
+				</when>
+				<when value="weblink">
+					<param name="item"  type="text" size="100" label="web location to link to " help="url to link to">
+						<sanitizer>
+							<valid initial="default"> 
+								<add preset="string.printable"/> 
+								<remove value="&amp;"/> 
+								<remove value=":"/>									
+							</valid> 
+							<mapping initial="none"> 
+								<add source="&amp;" target="==amp=="/>
+								<add source=":" target="==colon=="/>								
+							</mapping> 
+						</sanitizer>
+					</param>
+					<param name="item2" type="text" size="100" label="link text" help="text to display as a link"/>
+					<param name="break" type="boolean" checked="False" truevalue="Y" falsevalue="N" label="Insert break after item?" help="Insert a line break to force next item to appear below this one. If unchecked, the browser will decide layout"/>
+				</when>
+			</conditional>
+			</repeat>
+		</repeat>
+  		
+		
+		
+  	</inputs>
+
+	<outputs>
+  		<data format="html" name="report" label="HTML report: ${label}"/>
+  	</outputs>
+  	
+  	<help>  
+		Description of tool for the users
+	</help>
+</tool>
