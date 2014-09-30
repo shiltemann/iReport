@@ -1,10 +1,13 @@
 <tool id="iReport" name="iReport" version="1">
  	<description> create an HTML report </description>
 	
-
+	<requirements>
+		<requirement type="set_environment">REPOSITORY_PATH</requirement>
+	</requirements>
   	<command interpreter="bash"> 
 		
   		iReport.sh 
+			--toolpath \$REPOSITORY_PATH
 			--galaxypath ${report.files_path}
 			--htmlout ${report}
 			--minwidth ${minwidth}

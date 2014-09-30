@@ -1,5 +1,5 @@
 #!/bin/bash
-repositorypath="/mnt/galaxyTools/shed_tools/toolshed.nbic.nl/repos/saskia-hiltemann/ireport/71dc132e9bb2/ireport"  # TODO: dependency
+#repositorypath="/mnt/galaxyTools/shed_tools/toolshed.nbic.nl/repos/saskia-hiltemann/ireport/71dc132e9bb2/ireport"  # TODO: dependency
 source "${repositorypath}/createHTML.sh"
 
 echo "allparams: $@"
@@ -15,8 +15,8 @@ set -- `getopt -n$0 -u -a --longoptions="ifusepath: galaxypath: tab: item: htmlo
 while [ $# -gt 0 ]
 do
     case "$1" in
-       	--toolpath)      		repositorypath=$2;shift;;  
-		--galaxypath)			galaxypath=$2;shift;; 
+       	--toolpath)				repositorypath=$2;shift;;
+		--galaxypath)			galaxypath=$2;shift;;
 		--minwidth)				minwidth=$2;shift;; 
 		--tab)					tabs+=",$2";shift;;
 		--item)					items+=",$2";shift;;
