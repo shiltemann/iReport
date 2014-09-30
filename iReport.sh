@@ -1,6 +1,6 @@
 #!/bin/bash
 #repositorypath="/mnt/galaxyTools/shed_tools/toolshed.nbic.nl/repos/saskia-hiltemann/ireport/71dc132e9bb2/ireport"  # TODO: dependency
-source "${repositorypath}/createHTML.sh"
+
 
 echo "allparams: $@"
 function usage() { echo "Oops!"; }
@@ -31,7 +31,7 @@ do
     shift
 done
 
-
+source "${repositorypath}/createHTML.sh"
 mkdir $galaxypath
 
 tabs=${tabs//,/ }; tabs=${tabs/ /}
