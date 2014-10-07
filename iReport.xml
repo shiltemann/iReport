@@ -1,5 +1,5 @@
-<tool id="iReport-dev" name="iReport-dev" version="1">
- 	<description> create an HTML report-dev </description>
+<tool id="iReport" name="iReport" version="1">
+ 	<description> create an HTML report </description>
 	
 	<requirements>
 		<requirement type="set_environment">REPOSITORY_PATH</requirement>
