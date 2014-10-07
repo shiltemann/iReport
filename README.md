@@ -10,15 +10,21 @@ direct repository link:  http://saskia-hiltemann@toolshed.g2.bx.psu.edu/repos/sa
 email: s.hiltemann@erasmusmc.nl
 
 
+Installation Instructions
+--------------------------
+This package uses (but does not install) Bash, Perl and Python. 
+
+If Pandoc ((johnmacfarlane.net/pandoc/index.html)) is installed on your system PATH (command 'pandoc'), any MarkDown text items will be rendered using Pandoc (allows many markdown syntax extensions). 
+If Pandoc is not present, a simple markdown conversion script is used (only handles vanilla syntax).
 
 
-Planned changes
+TODOs
 ---------------
 - ~~option to download iReport webpage~~
-- more pluggable code to add content item types etc.
-- markdown instead of plain text/html in text fields.
-- multiple columns in table converted to weblinks.
-- table colums link to archive files in history
+- ~~markdown instead of plain text/html in text fields.~~
+- Support for large tables
+- Multiple columns in table converted to weblinks.
+- Table colums link to archive files in history
 - ..
-- ..suggestions anyone?
+- ..suggestions?
 

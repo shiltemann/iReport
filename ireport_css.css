@@ -1,0 +1,25 @@
+   body { 
+    min-width: ${minwidth}px; 
+    width: ${minwidth}px; 
+    min-height: 100%;
+   }
+   .invisibleframe{
+    border: 0px;
+    overflow: hidden;
+    min-height: 350px !important;
+   }
+   .mylinks{
+   color: blue !important;
+   }
+   .mylinks:visited {  
+   color: #551A8B !important;
+   }
+   .zoomme {
+    display: inline-block;
+   }
+   .markdown-body {
+    min-width: ${minwidth}px;
+    max-width: ${minwidth}px;
+    margin: 0 auto;
+    padding: 30px;
+   }

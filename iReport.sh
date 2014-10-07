@@ -65,7 +65,7 @@ then
 fi
 echo -e "coverimage3: $coverimage"
 
-## Copy supporting files to output directory
+## Copy supporting files from repository to output directory
 cp ${repositorypath}/jquery.dataTables.css ${galaxypath}/jquery.dataTables.css
 cp ${repositorypath}/jquery.dataTables.js ${galaxypath}/jquery.dataTables.js
 cp -R ${repositorypath}/iframe-resizer/ ${galaxypath}/iframe-resizer/
@@ -74,6 +74,9 @@ cp ${repositorypath}/jquery.zoom.js ${galaxypath}/jquery.zoom.js
 cp ${repositorypath}/jquery-ui.css ${galaxypath}/jquery-ui.css
 cp ${repositorypath}/jquery-1.10.2.js ${galaxypath}/jquery-1.10.2.js
 cp ${repositorypath}/jquery-ui.js ${galaxypath}/jquery-ui.js
+cp ${repositorypath}/md.css ${galaxypath}/md.css
+cp ${repositorypath}/ireport_css.css ${galaxypath}/ireport_css.css
+cp ${repositorypath}/ireport_jquery.js ${galaxypath}/ireport_jquery.js
 
 echo "done copying resource files"
 ls ${galaxypath}
