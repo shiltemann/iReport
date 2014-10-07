@@ -90,7 +90,6 @@ function makeTabContent ( ){
 						
 					else
 						# pandoc exists 
-						echo "pandoc exists"
 						pandoc -o mytext.html mytext.md
 						pandoc -o standalone.html -s mytext.md
 						
