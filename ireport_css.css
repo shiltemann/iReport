@@ -6,7 +6,7 @@
    .invisibleframe{
     border: 0px;
     overflow: hidden;
-    min-height: 350px !important;
+    min-height: 350px;
    }
    .mylinks{
    color: blue !important;
